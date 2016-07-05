@@ -1,24 +1,15 @@
-# README
+# Logster + Silent Assets bug
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Steps to reproduce:
 
-Things you may want to cover:
+- run `bundle install`, then `rails s` from command line
+- visit http://localhost:3000 in a browser
+- you should see a NoMethodError exception for Logster::Logger#silence
 
-* Ruby version
+This problem is triggered by `config.assets.quiet = true` in the application config.
 
-* System dependencies
+I can workaround this bug by adding this to `config/initializers/logster.rb`:
 
-* Configuration
+    Logster::Logger.include LoggerSilence
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+However this just causes it to fail with a different NoMethodError: `Logster::Logger#local_level=`
